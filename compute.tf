@@ -68,13 +68,13 @@ resource "aws_instance" "mtc_main" {
 #   }
 # }
 
-#using ansible to provison the grafana instead of userdata. using null resource and local provisioner because we want it to execute before provisioning the instances
-resource "null_resource" "grafana_install" {
-  depends_on = [aws_instance.mtc_main]
-  provisioner "local-exec" {
-    command = "ansible-playbook -i aws_hosts --key-file /home/lateefat/.ssh/mainkey playbooks/grafana.yml"
-  }
-}
+# #using ansible to provison the grafana instead of userdata. using null resource and local provisioner because we want it to execute before provisioning the instances
+# resource "null_resource" "grafana_install" {
+#   depends_on = [aws_instance.mtc_main]
+#   provisioner "local-exec" {
+#     command = "ansible-playbook -i aws_hosts --key-file /home/lateefat/.ssh/mainkey playbooks/grafana.yml"
+#   }
+# }
 
 output "grafana_access" {
   value = {for i in aws_instance.mtc_main[*] : i.tags.Name => "${i.public_ip}:3000"}
