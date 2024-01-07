@@ -41,7 +41,7 @@ resource "aws_instance" "mtc_main" {
   #local provisioner saves all ip address of instances created in a new file called aws_hosts
   #we can use terraform taint top destroy just the ec2 and reprovision the infrastructure
   provisioner "local-exec" {
-    command = "echo '${self.public_ip}' >> aws_hosts && aws ec2 wait instance-status-ok --instance-ids ${self.id} --region us-west-2"
+    command = "echo '${self.public_ip}' >> aws_hosts"
   }
 
   #local provisioner removes ip address from the aws_hosts after the insytance has been destroyed
