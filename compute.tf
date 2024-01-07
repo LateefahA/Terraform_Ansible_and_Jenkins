@@ -46,10 +46,10 @@ resource "aws_instance" "mtc_main" {
 
   #local provisioner removes ip address from the aws_hosts after the insytance has been destroyed
   #loca provisioners are not recognised in the terraform state, to run a code witht he destroy command, we destroy all the resources and reprovision
-#   provisioner "local-exec" {
-#     when    = destroy
-#     command = "PowerShell -Command \"$ipToRemove = '${self.public_ip}'; (Get-Content aws_hosts | Where-Object {$_ -ne $ipToRemove}) | Set-Content aws_hosts\""
-# }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "sed -i '/^[0-9]/d' aws_hosts"
+  }
 
 }
 
