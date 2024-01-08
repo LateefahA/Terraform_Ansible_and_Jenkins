@@ -18,10 +18,12 @@ pipeline{
 			}
 		}
 		stage('Validate Apply') {
-			steps {
-				script {
-						input message: "Do you want to apply this plan?", ok: "Apply this plan."
-					}
+			input {
+				message "Do you want to apply this plan"
+				ok "Apply this plan."
+				}
+				steps {
+					echo 'Apply Accepted'
 				}
 			}
 		stage('Apply') {
@@ -34,11 +36,29 @@ pipeline{
 				sh 'aws ec2 wait instance-status-ok --region us-west-2'
 			}
 		}
+		stage('Validate Ansible') {
+			input {
+				message "Do you want to run ansible"
+				ok "Run Ansible!"
+				}
+				steps {
+					echo 'Ansible Accepted'
+				}
+			}
 		stage ('Ansible') {
 			steps{
 				ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'playbooks/main-playbook.yml')
 			}
 		}
+		stage('Validate Destroy') {
+			input {
+				message "Do you want to destroy"
+				ok "Destroy."
+				}
+				steps {
+					echo 'Destroy Accepted!'
+				}
+			}
 		stage('Destroy') {
 			steps {
 				sh 'terraform destroy -auto-approve -no-color'
