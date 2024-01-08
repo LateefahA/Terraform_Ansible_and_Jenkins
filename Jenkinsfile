@@ -20,13 +20,10 @@ pipeline{
 		stage('Validate Apply') {
 			steps {
 				script {
-					input {
-						message "Do you want to apply this plan?"
-						ok "Apply this plan."
+						input message: "Do you want to apply this plan?", ok: "Apply this plan."
 					}
 				}
 			}
-		}
 		stage('Apply') {
 			steps {
 				sh 'terraform apply -auto-approve -no-color'
