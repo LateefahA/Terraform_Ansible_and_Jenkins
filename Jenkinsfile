@@ -28,7 +28,7 @@ pipeline{
 			}
 		stage('Apply') {
 			steps {
-				sh 'terraform apply -auto-approve -no-color'
+				sh 'terraform apply -auto-approve -no-color -var-file="test.tfvars"'
 			}
 		}
 		stage('Ec2 Wait') {
@@ -63,6 +63,14 @@ pipeline{
 			steps {
 				sh 'terraform destroy -auto-approve -no-color'
 			}
+		}
+	}
+	post {
+		success {
+			echo 'Success!'
+		}
+		failure {
+			sh 'terraform destroy -auto-approve -no-color'
 		}
 	}
 }
