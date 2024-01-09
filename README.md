@@ -14,9 +14,6 @@ This repository contains the projects and exercises I completed as part of my De
 - **Ansible:** Learned configuration management and application deployment.
 - **Jenkins:** Mastered the basics of continuous integration and deployment pipelines.
 
-## Personal Reflection
-This course was an invaluable step in my journey to becoming proficient in DevOps. The hands-on approach allowed me to understand the practical aspects of deploying and managing applications in the cloud. I am excited to apply these skills in future projects and professional endeavors.
-
 ## Repository Structure
 - **Terraform:** Contains Terraform scripts used for provisioning AWS resources.
 - **Ansible:** Includes Ansible playbooks and roles for configuration management.
