@@ -5,7 +5,7 @@ variable "vpc_cidr" {
 
 variable "access_ip" {
   type    = string
-  default = "0.0.0.0/0"
+  default = "My_IP"
 }
 
 variable "main_instance_type" {
