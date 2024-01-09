@@ -1,4 +1,4 @@
-# DevOps Learning Journey: Grafana, Prometheus, Terraform, Ansible, and Jenkins
+# DevOps: Grafana, Prometheus, Terraform, Ansible, and Jenkins
 
 ## Overview
 This repository contains the projects and exercises I completed as part of my DevOps learning journey. The course focused on deploying Grafana and Prometheus to AWS EC2 instances using Terraform, Ansible, and Jenkins.
