@@ -38,18 +38,18 @@ resource "aws_instance" "mtc_main" {
     Name = "mtc-main-${random_id.mtc_node_id[count.index].dec}"
   }
 
-  #local provisioner saves all ip address of instances created in a new file called aws_hosts
-  #we can use terraform taint top destroy just the ec2 and reprovision the infrastructure
-  provisioner "local-exec" {
-    command = "echo '${self.public_ip}' >> aws_hosts"
-  }
+  # #local provisioner saves all ip address of instances created in a new file called aws_hosts
+  # #we can use terraform taint top destroy just the ec2 and reprovision the infrastructure
+  # provisioner "local-exec" {
+  #   command = "echo '${self.public_ip}' >> aws_hosts"
+  # }
 
-  #local provisioner removes ip address from the aws_hosts after the insytance has been destroyed
-  #loca provisioners are not recognised in the terraform state, to run a code witht he destroy command, we destroy all the resources and reprovision
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sed -i '/^[0-9]/d' aws_hosts"
-  }
+  # #local provisioner removes ip address from the aws_hosts after the insytance has been destroyed
+  # #loca provisioners are not recognised in the terraform state, to run a code witht he destroy command, we destroy all the resources and reprovision
+  # provisioner "local-exec" {
+  #   when    = destroy
+  #   command = "sed -i '/^[0-9]/d' aws_hosts"
+  # }
 
 }
 
@@ -81,3 +81,10 @@ output "grafana_access" {
 }
 
 
+output "instance_ids" {
+  value = [for i in aws_instance.mtc_main[*]: i.id]
+}
+
+output "instance_ips" {
+  value = [for i in aws_instance.mtc_main[*]: i.public_ip]
+}

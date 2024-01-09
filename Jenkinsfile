@@ -36,9 +36,18 @@ pipeline{
 				sh 'terraform apply -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars"'
 			}
 		}
+		stage("Inventory") {
+			steps {
+				sh '''printf \\
+						"\\n$(terraform output -json instance_ips | jq -r \'.[]\')" \\
+						>> aws_hosts'''
+			}
+		}
 		stage('Ec2 Wait') {
 			steps {
-				sh 'aws ec2 wait instance-status-ok --region us-west-2'
+				sh '''aws ec2 wait instance-status-ok \\
+							--instance-ids $(terraform output -json instance_ids | jq -r \'.[]\') \\
+							--region us-west-2'''
 			}
 		}
 		stage('Validate Ansible') {
@@ -57,6 +66,11 @@ pipeline{
 		stage ('Ansible') {
 			steps{
 				ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'playbooks/main-playbook.yml')
+			}
+		}
+		stage ('Test Grafana and Prometheus') {
+			steps {
+				ansiblePlaybook(credentialsId: 'ec2-ssh-key', inventory: 'aws_hosts', playbook: 'playbooks/node-test.yml')
 			}
 		}
 		stage('Validate Destroy') {
@@ -81,7 +95,11 @@ pipeline{
 		failure {
 			sh 'terraform destroy -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars"'
 		}
+<<<<<<< HEAD
 		aborted{
+=======
+		aborted {
+>>>>>>> dev
 			sh 'terraform destroy -auto-approve -no-color -var-file="$BRANCH_NAME.tfvars"'
 		}
 	}
