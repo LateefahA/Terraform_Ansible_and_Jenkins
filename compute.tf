@@ -84,3 +84,7 @@ output "grafana_access" {
 output "instance_ids" {
   value = [for i in aws_instance.mtc_main[*]: i.id]
 }
+
+output "instance_ips" {
+  value = [for i in aws_instance.mtc_main[*]: i.public_ip]
+}
